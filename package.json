@@ -1,0 +1,23 @@
+{
+  "name": "excel-to-crud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bibidu/excel-to-crud.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bibidu/excel-to-crud/issues"
+  },
+  "homepage": "https://github.com/bibidu/excel-to-crud#readme",
+  "dependencies": {
+    "excel": "^1.0.1"
+  }
+}
