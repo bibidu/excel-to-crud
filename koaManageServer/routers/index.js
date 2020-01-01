@@ -1,11 +1,14 @@
 
   const router = require("koa-router")()
-  
-  function generateApi (mappingUrl, reqType, result) {
-    router[reqType](mappingUrl, ctx => ctx.body = result)
+  const query = require('../utils/mysql')
+
+  function generateApi (mappingUrl, reqType, sqlString) {
+    if (sqlString) {
+      router[reqType](mappingUrl, ctx => query(sqlString).then(res => ctx.body = res))
+    }
   }
   
-  generateApi('/list', 'get', [{"id":"1","name":"杜宪章","age":"18","address":"金寨县"},{"id":"2","name":"赵冰冰","age":"27","address":"富阳镇"},{"id":"3","name":"李会烦","age":"31","address":"1"}])
-  generateApi('/getById', 'get', undefined)
+  generateApi('/list', 'get', 'select * from list limit 0, 10')
+  generateApi('/getById', 'get', '')
   
   module.exports = router
