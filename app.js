@@ -14,14 +14,38 @@ class App {
     this.datas = []
   }
 
+  checkAttrNames(data) {
+    const [attrNames, ...datas] = data
+
+    if (!datas) {
+      return { error: true, msg: '至少需要一条数据!' }
+    }
+
+    const set = new Set()
+    attrNames.forEach(item => set.add(item))
+    if ([...set].length !== attrNames.length) {
+      return { error: true, msg: '字段名不能重复!' }
+    }
+
+    if (attrNames.some(item => item === '')) {
+      return { error: true, msg: '字段名不能为空!' }
+    }
+    console.log(attrNames)
+    if (attrNames.some(item => !(/[a-zA-Z]/.test(String(item).charAt(0))))) {
+      return { error: true, msg: '字段名开头必须是字母!' }
+    }
+
+    return { error: false, msg: '' }
+  }
   parse() {
     return excelParse(this.targetExcelPath).then((data) => {
       const [attrNames, ...datas] = data
-      if (!datas) {
-        throw Error('至少需要一条数据!')
+      const { msg, error } = this.checkAttrNames(data)
+      if (error) {
+        throw Error(msg)
       }
       this.attrNames = attrNames
-      this.datas = datas
+      this.datas = datas.filter(item => !item.every(i => !i))
     });
   }
 
