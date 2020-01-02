@@ -5,6 +5,10 @@
     return http.get('getCanFilterAttrNames', { tableName: tableName })
   }
   
+  function add(entity) {
+    return http.post('add', { entity: entity })
+  }
+  
     function list(data) {
       return http.get('list', data)
     }
@@ -15,6 +19,7 @@
     
   export default {
     getCanFilterAttrNames,
+    add,
     list,
     getById
   }

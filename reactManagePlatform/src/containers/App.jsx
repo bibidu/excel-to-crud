@@ -1,19 +1,29 @@
-import React from 'react';
-import { Layout, Menu, Breadcrumb, Icon, Table, Button, Select } from 'antd';
+import React from 'react'
+import {
+  Layout,
+  Menu,
+  Breadcrumb,
+  Icon,
+  Table,
+  Button,
+  Select,
+  Modal,
+  Form,
+  Input,
+} from 'antd'
 import api from '../api'
 
 const { Option } = Select
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const { SubMenu } = Menu
+const { Header, Content, Sider } = Layout
 
 class ContentTitle extends React.Component {
-
   render() {
-    const { options, changeFilter } = this.props
+    const { options, changeFilter, value } = this.props
     return (
       <div className="table-operations">
         <span style={{marginRight: '5px', fontWeight: 'bold'}}>Sort By</span>
-        <Select style={{ width: 120, marginRight: 10 }} onChange={changeFilter}>
+        <Select value={value} style={{ width: 120, marginRight: 10 }} onChange={changeFilter}>
           {
             options.map((option, idx) => <Option key={idx} value={option}>{option}</Option>)
           }
@@ -23,55 +33,63 @@ class ContentTitle extends React.Component {
     )
   }
 }
-// class MyTable extends React.Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = {
-//       attrs: [],
-//       datas: []
-//     }
-//   }
 
-//   componentDidMount() {
-//     const widths = [150, 150, 300];
-//     api.list().then(results => {
-//       let { data: datas, code } = results
-//       let attrs = Object.keys(datas[0])
-//       attrs = attrs.map((item, idx) => ({
-//         title: item,
-//         dataIndex: item,
-//         width: widths[idx]
-//       }));
-//       datas = datas.map((item, idx) => ({
-//         key: idx,
-//         ...item
-//       }))
+function hasErrors(fieldsError) {
+  return Object.keys(fieldsError).some(field => fieldsError[field]);
+}
 
-//       this.setState({
-//         attrs,
-//         datas,
-//       })
-//     })
-//   }
+class HorizontalLoginForm extends React.Component {
+  componentDidMount() {
+    this.props.form.validateFields();
+  }
 
-//   render() {
-//     const { attrs, datas } = this.state
-//     return <Table
-//       columns={attrs}
-//       dataSource={datas}
-//       pagination={{ pageSize: 10 }}
-//       position="both"
-//     />
-//   }
-// }
+  handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(this.props.form)
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        this.props.handleSubmit(values)
+      }
+    });
+  }
+  render() {
+    const { options, form, handleSubmit } = this.props
+    const { getFieldDecorator } = form
+    return (
+      <Form onSubmit={this.handleSubmit}>
+        {
+          options.map((option, idx) => (
+            <Form.Item label={option} key={idx}>
+              {getFieldDecorator(option, {
+                rules: [{ required: false, }],
+              })(
+              <Input
+                placeholder={`Please Input ${option}`}
+              />
+            )}
+            </Form.Item>
+          ))
+        }
+        <Form.Item style={{textAlign: 'center'}}>
+          <Button type="primary" htmlType="submit">
+            提交
+          </Button>
+        </Form.Item>
+      </Form>
+    );
+  }
+}
+const WrappedHorizontalLoginForm = Form.create({ name: 'horizontal_login' })(HorizontalLoginForm);
+
 
 export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      attrs: [],
       datas: [],
-      options: []
+      options: [],
+      showAddModal: false,
+      filterValue: '',
     }
   }
 
@@ -79,19 +97,12 @@ export default class App extends React.Component {
     const widths = [150, 150, 300];
     api.list(queryConditions).then(results => {
       let { data: datas, code } = results
-      let attrs = Object.keys(datas[0])
-      attrs = attrs.map((item, idx) => ({
-        title: item,
-        dataIndex: item,
-        width: widths[idx]
-      }));
       datas = datas.map((item, idx) => ({
         key: idx,
         ...item
       }))
 
       this.setState({
-        attrs,
         datas,
       })
     })
@@ -100,16 +111,24 @@ export default class App extends React.Component {
   fetchFilterAttrList = () => {
     api.getCanFilterAttrNames('list').then(results => {
       console.log('fetchFilterAttrList ', results.data)
+      const columnList = results.data.map(item => item.column_name)
       this.setState({
-        options: results.data.map(item => item.column_name).filter(item => item !== 'uniqueid')
+        options: columnList.filter(item => item !== 'uniqueid'),
       })
     })
   }
 
   changeFilter = (value) => {
+    this.setState({ filterValue: value })
     this.fetchListAndSet({ orderBy: value })
   }
 
+  clearFilter = () => {
+    this.setState({
+      filterValue: ''
+    })
+    this.fetchListAndSet()
+  }
   componentDidMount() {
     // 查询所有filter可选项
     this.fetchFilterAttrList()
@@ -121,11 +140,48 @@ export default class App extends React.Component {
     return options.map(option => ({ title: option, dataIndex: option }))
   }
 
+  showAddModal = () => {
+    this.setState({
+      showAddModal: true
+    })
+  }
+
+  handleSubmit = (values) => {
+    api.add(values).then(res => {
+      console.log('api add ', res)
+      this.setState({
+        showAddModal: false
+      })
+    })
+  }
+
   render() {
-    const { attrs, datas, options } = this.state
-    console.log(attrs)
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 20 },
+      },
+    };
+    const { datas, options, filterValue, showAddModal } = this.state
     return (
       <Layout style={{height: '100%'}}>
+        {/* 添加功能 模态窗 */}
+        <Modal
+          title="添加"
+          centered
+          visible={showAddModal}
+          footer={null}
+          onCancel={() => this.setState({ showAddModal: false })}
+        >
+          <WrappedHorizontalLoginForm
+            options={options}
+            handleSubmit={this.handleSubmit}
+          />
+        </Modal>
         <Header className="header">
           <div className="logo" />
           <Menu
@@ -201,10 +257,12 @@ export default class App extends React.Component {
             {/* 筛选条件 */}
             <div style={{ marginBottom: 10, display: 'flex' }}>
               <ContentTitle
+                value={filterValue}
                 options={options}
                 changeFilter={this.changeFilter}
               />
-              {/* <Button>添加</Button> */}
+              <Button style={{ marginRight: 10}} onClick={this.clearFilter}>清空筛选</Button>
+              <Button type="primary" onClick={this.showAddModal}>添加</Button>
             </div>
 
             <Content

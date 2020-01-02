@@ -5,11 +5,20 @@ module.exports = function(apiList) {
   `
   const apiNames = []
 
+  // 查询过滤器的name list
   apiNames.push('getCanFilterAttrNames')
 
   str += `
   function getCanFilterAttrNames(tableName) {
     return http.get('getCanFilterAttrNames', { tableName: tableName })
+  }
+  `
+  // 新增
+  apiNames.push('add')
+
+  str += `
+  function add(entity) {
+    return http.post('add', { entity: entity })
   }
   `
 
