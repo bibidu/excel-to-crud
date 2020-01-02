@@ -1,16 +1,21 @@
 import axios from 'axios'
 
 function get(url, data = {}) {
-  console.log('gegege', url)
+  console.log('[HTTP.GET]', url)
   return axios({
     method: 'get',
     url: `http://localhost:4000/${url}`,
-    data: data
+    params: data
   })
 }
 
-function post(url, params) {
-
+function post(url, data = {}) {
+  console.log('[HTTP.POST]', url)
+  return axios({
+    method: 'post',
+    url: `http://localhost:4000/${url}`,
+    data: data
+  })
 }
 
 export default {

@@ -35,16 +35,16 @@ class App {
       _path = path.resolve('.', './koaManageServer/tasks/index.js')
       return fs.writeFileSync(_path, result, 'utf8')
     }
-    // if (type === 'frontApi') {
-    //   _path = path.resolve('.', './reactManagePlatform/src/api/index.js')
-    //   return fs.writeFileSync(_path, result, 'utf8')
-    // }
+    if (type === 'frontApi') {
+      _path = path.resolve('.', './reactManagePlatform/src/api/index.js')
+      return fs.writeFileSync(_path, result, 'utf8')
+    }
   }
 
   getRequestByType(resultType) {
     switch(resultType) {
       case 'LIST': {
-        return `select * from list limit 0, 10`
+        return `select * from list`
       }
       default:
         return ``
@@ -82,8 +82,7 @@ class App {
   generateCode() {
     this.generateDB()
     this.generateApi()
-    // TODO: 接入数据库后移除
-    // this.generateData()
+    this.generateData()
   }
 
   generateApi() {
@@ -100,16 +99,16 @@ class App {
   //   { type: 'get', url: '/list', resultType: 'LIST' },
   //   { type: 'get', url: '/getById', resultType: 'GET_BY_ID' },
   // ]
-  // generateData() {
-  //   const result = []
-  //   apis.forEach(({ url, type }) => {
-  //     result.push({ apiName: url.slice(1), type  })
-  //   })
+  generateData() {
+    const result = []
+    apis.forEach(({ url, type }) => {
+      result.push({ apiName: url.slice(1), type  })
+    })
 
-  //   const generateFrontApi = require('./generate/page')
-  //   const frontApiResult = generateFrontApi(result)
-  //   this.create('frontApi', frontApiResult)
-  // }
+    const generateFrontApi = require('./generate/page')
+    const frontApiResult = generateFrontApi(result)
+    this.create('frontApi', frontApiResult)
+  }
 
 }
 

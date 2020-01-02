@@ -1,23 +1,83 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb, Icon, Table } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon, Table, Button, Select } from 'antd';
 import api from '../api'
 
+const { Option } = Select
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
+class ContentTitle extends React.Component {
 
-class MyTable extends React.Component {
+  render() {
+    const { options, changeFilter } = this.props
+    return (
+      <div className="table-operations">
+        <span style={{marginRight: '5px', fontWeight: 'bold'}}>Sort By</span>
+        <Select style={{ width: 120, marginRight: 10 }} onChange={changeFilter}>
+          {
+            options.map((option, idx) => <Option key={idx} value={option}>{option}</Option>)
+          }
+        </Select>
+        {/* <Button onClick={this.clearFilters}>Clear filters</Button> */}
+      </div>
+    )
+  }
+}
+// class MyTable extends React.Component {
+//   constructor(props) {
+//     super(props)
+//     this.state = {
+//       attrs: [],
+//       datas: []
+//     }
+//   }
+
+//   componentDidMount() {
+//     const widths = [150, 150, 300];
+//     api.list().then(results => {
+//       let { data: datas, code } = results
+//       let attrs = Object.keys(datas[0])
+//       attrs = attrs.map((item, idx) => ({
+//         title: item,
+//         dataIndex: item,
+//         width: widths[idx]
+//       }));
+//       datas = datas.map((item, idx) => ({
+//         key: idx,
+//         ...item
+//       }))
+
+//       this.setState({
+//         attrs,
+//         datas,
+//       })
+//     })
+//   }
+
+//   render() {
+//     const { attrs, datas } = this.state
+//     return <Table
+//       columns={attrs}
+//       dataSource={datas}
+//       pagination={{ pageSize: 10 }}
+//       position="both"
+//     />
+//   }
+// }
+
+export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       attrs: [],
-      datas: []
+      datas: [],
+      options: []
     }
   }
 
-  componentDidMount() {
+  fetchListAndSet = (queryConditions) => {
     const widths = [150, 150, 300];
-    api.list().then(results => {
+    api.list(queryConditions).then(results => {
       let { data: datas, code } = results
       let attrs = Object.keys(datas[0])
       attrs = attrs.map((item, idx) => ({
@@ -37,19 +97,33 @@ class MyTable extends React.Component {
     })
   }
 
-  render() {
-    const { attrs, datas } = this.state
-    return <Table
-      columns={attrs}
-      dataSource={datas}
-      pagination={{ pageSize: 10 }}
-      position="both"
-    />
+  fetchFilterAttrList = () => {
+    api.getCanFilterAttrNames('list').then(results => {
+      console.log('fetchFilterAttrList ', results.data)
+      this.setState({
+        options: results.data.map(item => item.column_name).filter(item => item !== 'uniqueid')
+      })
+    })
   }
-}
 
-export default class App extends React.Component {
+  changeFilter = (value) => {
+    this.fetchListAndSet({ orderBy: value })
+  }
+
+  componentDidMount() {
+    // 查询所有filter可选项
+    this.fetchFilterAttrList()
+    // 查询列表数据
+    this.fetchListAndSet()
+  }
+
+  getTableColumnByattrName = (options) => {
+    return options.map(option => ({ title: option, dataIndex: option }))
+  }
+
   render() {
+    const { attrs, datas, options } = this.state
+    console.log(attrs)
     return (
       <Layout style={{height: '100%'}}>
         <Header className="header">
@@ -123,6 +197,16 @@ export default class App extends React.Component {
               <Breadcrumb.Item>List</Breadcrumb.Item>
               <Breadcrumb.Item>App</Breadcrumb.Item>
             </Breadcrumb>
+
+            {/* 筛选条件 */}
+            <div style={{ marginBottom: 10, display: 'flex' }}>
+              <ContentTitle
+                options={options}
+                changeFilter={this.changeFilter}
+              />
+              {/* <Button>添加</Button> */}
+            </div>
+
             <Content
               style={{
                 background: '#fff',
@@ -131,7 +215,12 @@ export default class App extends React.Component {
                 minHeight: 280,
               }}
             >
-              <MyTable />
+              <Table
+                columns={this.getTableColumnByattrName(options)}
+                dataSource={datas}
+                pagination={{ pageSize: 10 }}
+                position="both"
+              />
             </Content>
           </Layout>
         </Layout>
