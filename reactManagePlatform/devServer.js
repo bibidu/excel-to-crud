@@ -34,7 +34,7 @@ app.use(historyApiFallback({
 app.listen(PORT, (err) => {
   if (err) {
     console.error(err);
-    return;
+    return; 
   }
 
   console.log(`Listening on port ${PORT}`);

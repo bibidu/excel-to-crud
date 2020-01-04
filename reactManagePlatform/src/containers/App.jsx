@@ -171,7 +171,7 @@ export default class App extends React.Component {
       <Layout style={{height: '100%'}}>
         {/* 添加功能 模态窗 */}
         <Modal
-          title="添加"
+          title="添加" 
           centered
           visible={showAddModal}
           footer={null}

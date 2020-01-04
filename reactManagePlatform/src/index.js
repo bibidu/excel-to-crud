@@ -4,7 +4,7 @@ import App from './containers/App';
 
 import 'antd/dist/antd.css';
 import './styles/base.less';
-
-ReactDom.render(
+console.log('render 7 ')
+ReactDom.render( 
   <App />, document.getElementById('root')
 );
