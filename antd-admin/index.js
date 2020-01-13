@@ -1,13 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import 'antd/dist/antd.css';
 
-ReactDOM.render(
-  <div>
-    {
-      [1, 2].map(item => (
-        <button style={{color: 'red'}}>123</button>
-      ))
-    }
-  </div>,
+import App from './components/Layout'
+
+ReactDOM.render(<App />,
   document.getElementById("app")
 )

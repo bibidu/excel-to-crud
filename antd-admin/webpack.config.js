@@ -24,11 +24,20 @@ module.exports = {
               }],
             ],
             plugins: [
-              ['@babel/plugin-transform-react-jsx']
+              ['@babel/plugin-proposal-class-properties'],
+              ['@babel/plugin-transform-react-jsx'],
             ]
           }
         },
         exclude: /node_modules/
+      },
+      {
+        test: /\.(less)$/,
+        use: ['style-loader', 'css-loader', 'less-loader']
+      },
+      {
+        test: /\.(css)$/,
+        use: ['style-loader', 'css-loader']
       }
     ]
   },

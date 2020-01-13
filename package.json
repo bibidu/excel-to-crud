@@ -19,5 +19,8 @@
   "homepage": "https://github.com/bibidu/excel-to-crud#readme",
   "dependencies": {
     "excel": "^1.0.1"
+  },
+  "devDependencies": {
+    "husky": "^4.0.7"
   }
 }
