@@ -1,9 +1,9 @@
 import React from 'react'
-import './layout.less'
+import './index.less'
 import {Route, NavLink} from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 const { Header, Sider, Content } = Layout;
-import baseConfig from '../config/base'
+import baseConfig from '../../config/base'
 
 class App extends React.Component {
   state = {
@@ -18,7 +18,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <Layout style={{height: '100%'}}>
+      <Layout>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
           <div className="logo" />
           <Menu theme="light" style={{height: '100%'}} mode="inline" defaultSelectedKeys={['0']}>
@@ -55,7 +55,7 @@ class App extends React.Component {
                   key={idx}
                   exact={config.defaultPage}
                   path={config.path}
-                  component={require(`../pages/${config.componentName}`).default}/>
+                  component={require(`../../pages/${config.componentName}`).default}/>
                 ))
             }
           </Content>
