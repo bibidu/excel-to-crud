@@ -1,0 +1,16 @@
+[
+  {
+    "iconType": "unordered-list",
+    "name": "List",
+    "componentName": "List",
+    "defaultPage": true,
+    "path": "/list"
+  },
+  {
+    "iconType": "line-chart",
+    "name": "Charts",
+    "componentName": "Charts",
+    "defaultPage": false,
+    "path": "/charts"
+  }
+]

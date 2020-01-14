@@ -1,10 +1,11 @@
 import React from 'react'
 import './layout.less'
-
+import {Route, NavLink} from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 const { Header, Sider, Content } = Layout;
+import baseConfig from '../config/base'
 
-export default class extends React.Component {
+class App extends React.Component {
   state = {
     collapsed: false,
   };
@@ -20,19 +21,15 @@ export default class extends React.Component {
       <Layout style={{height: '100%'}}>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
           <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1">
-              <Icon type="user" />
-              <span>nav 1</span>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Icon type="video-camera" />
-              <span>nav 2</span>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <Icon type="upload" />
-              <span>nav 3</span>
-            </Menu.Item>
+          <Menu theme="light" style={{height: '100%'}} mode="inline" defaultSelectedKeys={['0']}>
+            {
+              baseConfig.map((item, idx) => (
+                <Menu.Item key={idx} onClick={() => this.props.history.push(item.path)}>
+                  <Icon type={item.iconType} />
+                  <span>{item.name}</span>
+                </Menu.Item>
+              ))
+            }
           </Menu>
         </Sider>
         <Layout>
@@ -52,11 +49,19 @@ export default class extends React.Component {
               minHeight: 280,
             }}
           >
-            Content123345
+            {
+              baseConfig.map((config, idx) => (
+                <Route
+                  key={idx}
+                  exact={config.defaultPage}
+                  path={config.path}
+                  component={require(`../pages/${config.componentName}`).default}/>
+                ))
+            }
           </Content>
         </Layout>
       </Layout>
     );
   }
 }
-
+export default App
