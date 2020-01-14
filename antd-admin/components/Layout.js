@@ -4,7 +4,7 @@ import './layout.less'
 import { Layout, Menu, Icon } from 'antd';
 const { Header, Sider, Content } = Layout;
 
-export default class SiderDemo extends React.Component {
+export default class extends React.Component {
   state = {
     collapsed: false,
   };
@@ -52,7 +52,7 @@ export default class SiderDemo extends React.Component {
               minHeight: 280,
             }}
           >
-            Content
+            Content123345
           </Content>
         </Layout>
       </Layout>
