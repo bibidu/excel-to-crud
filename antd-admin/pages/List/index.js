@@ -177,10 +177,11 @@ export default class extends React.Component {
       {/* 列表主体区域 */}
       <div className="table-area">
         <Table
+          tableLayout="auto"
           columns={(() => {
             const t = data.concat({
               title: 'Operation',
-              fixed: 'right',
+              // fixed: 'right',
               render: (text, record) => {
                 return (
                   <Dropdown
