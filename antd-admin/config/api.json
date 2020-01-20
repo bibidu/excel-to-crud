@@ -1,0 +1,12 @@
+[
+  {
+    "title": "请求方式",
+    "dataIndex": "reqMethod",
+    "key": "reqMethod"
+  },
+  {
+    "title": "请求路径",
+    "dataIndex": "reqPath",
+    "key": "reqPath"
+  }
+]
