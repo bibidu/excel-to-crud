@@ -1,10 +1,10 @@
 import React from 'react'
 import { BarsOutlined, DownOutlined } from '@ant-design/icons'
 import './index.less'
-import data from '../../config/data'
+import data from '@config/data'
 import {
   mock,
-} from '../../utils'
+} from '@utils'
 import {
   Input,
   Dropdown,

@@ -3,7 +3,7 @@ import './index.less'
 import {Route, NavLink} from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 const { Header, Sider, Content } = Layout;
-import baseConfig from '../../config/base'
+import baseConfig from '@config/base'
 
 class App extends React.Component {
   state = {

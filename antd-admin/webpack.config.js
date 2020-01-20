@@ -15,6 +15,14 @@ module.exports = {
   devServer: {
     port: 3000,
   },
+  resolve: {
+    alias: {
+      "@config": path.resolve(__dirname, "config"),
+      "@components": path.resolve(__dirname, "components"),
+      "@routers": path.resolve(__dirname, "routers"),
+      "@utils":path.resolve(__dirname, "utils"),
+    },
+  },
   module: {
     rules: [
       {
