@@ -18,7 +18,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <Layout>
+      <Layout style={{height: '100%'}}>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
           <div className="logo" />
           <Menu theme="light" style={{height: '100%'}} mode="inline" defaultSelectedKeys={['0']}>
