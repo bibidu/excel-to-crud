@@ -12,5 +12,12 @@
     "componentName": "Charts",
     "defaultPage": false,
     "path": "/charts"
+  },
+  {
+    "iconType": "line-chart",
+    "name": "Api",
+    "componentName": "Api",
+    "defaultPage": false,
+    "path": "/api"
   }
 ]
