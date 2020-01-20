@@ -3,7 +3,7 @@ import './index.less'
 import {Route, NavLink} from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 const { Header, Sider, Content } = Layout;
-import baseConfig from '@config/base'
+import configMenu from '@config/menu'
 
 class App extends React.Component {
   state = {
@@ -23,7 +23,7 @@ class App extends React.Component {
           <div className="logo" />
           <Menu theme="light" style={{height: '100%'}} mode="inline" defaultSelectedKeys={['0']}>
             {
-              baseConfig.map((item, idx) => (
+              configMenu.map((item, idx) => (
                 <Menu.Item key={idx} onClick={() => this.props.history.push(item.path)}>
                   <Icon type={item.iconType} />
                   <span>{item.name}</span>
@@ -50,7 +50,7 @@ class App extends React.Component {
             }}
           >
             {
-              baseConfig.map((config, idx) => (
+              configMenu.map((config, idx) => (
                 <Route
                   key={idx}
                   exact={config.defaultPage}
