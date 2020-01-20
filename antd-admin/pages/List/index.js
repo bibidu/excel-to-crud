@@ -3,6 +3,9 @@ import { BarsOutlined, DownOutlined } from '@ant-design/icons'
 import './index.less'
 import data from '../../config/data'
 import {
+  mock,
+} from '../../utils'
+import {
   Input,
   Dropdown,
   Cascader,
@@ -88,17 +91,15 @@ export default class extends React.Component {
     console.log(pageSize)
   }
 
-  fetchTableDataAndSet = () => {
-    const tableData = []
-    for (let i = 0; i < 100; i++) {
-      tableData.push({
-        key: i,
-        name: `Edrward ${i}`,
-        age: 32,
-        address: `London Park no. ${i}`,
-      });
-    }
-    this.setState({ tableData })
+  fetchTableData = () => {
+    return new Promise(resolve => {
+      const dataKeys = data.map(item => item.dataIndex)
+      const mockResult = mock({
+        dataKeys,
+        number: 22,
+      }).map((item, idx) => ({...item, key: idx}))
+      resolve(mockResult)
+    })
   }
 
   onOkFormModal = () => {
@@ -134,7 +135,10 @@ export default class extends React.Component {
     })
   }
   componentDidMount() {
-    this.fetchTableDataAndSet()
+    this.fetchTableData().then(tableData => {
+      this.setState({ tableData })
+    })
+
   }
 
   render() {
